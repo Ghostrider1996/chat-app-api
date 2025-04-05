@@ -4,7 +4,7 @@ import cors from "cors";
 import OpenAI from "openai";
 import express, { Request, Response } from "express";
 import { StreamChat } from "stream-chat";
-import { generateRandomId } from "./utilFunctions/utilService";
+import { generateRandomId } from "./utilFunctions/utilServices";
 import { db } from "./config/database.js";
 import { chats, users } from "./db/schema.js";
 import { eq } from "drizzle-orm";

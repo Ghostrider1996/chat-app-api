@@ -15,6 +15,7 @@ export const users = pgTable("users", {
     createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// Type inference for Drizzle queries
 export type ChatInsert = typeof chats.$inferInsert;
 export type ChatSelect = typeof chats.$inferInsert;
 export type UserInsert = typeof users.$inferInsert;

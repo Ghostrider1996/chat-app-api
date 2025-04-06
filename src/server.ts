@@ -8,7 +8,7 @@ import { generateRandomId } from "./utilFunctions/utilServices";
 import { db } from "./config/database.js";
 import { chats, users } from "./db/schema.js";
 import { eq } from "drizzle-orm";
-import { ChatCompletionMessage } from "openai/resources.mjs";
+// import { ChatCompletionMessage } from "openai/resources.mjs";
 
 // Config
 dotenv.config();
@@ -27,6 +27,7 @@ const chatClient = StreamChat.getInstance(
 
 // Initialize OpenAI
 const openai = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
     apiKey: process.env.OPEN_AI_API_KEY,
 });
 
@@ -83,10 +84,20 @@ app.post("/chat", async (req: Request, res: Response): Promise<any> => {
 
         if (!existingUser.length) return res.status(404).json({ error: "User not found. Please register first" });
 
+
+
         const aiAnswer = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [{ "role": "user", "content": message }],
+            model: "deepseek/deepseek-r1:free",
+            messages: [{ "role": "user", "content": message }]
         });
+
+        console.log(aiAnswer.choices[0]?.message.content ?? "No response from AI");
+
+
+        // const aiAnswer = await openai.chat.completions.create({
+        //     model: "gpt-4o-mini",
+        //     messages: [{ "role": "user", "content": message }],
+        // });
 
         const aiMessage: string = aiAnswer.choices[0]?.message.content ?? "No response from AI";
 
@@ -122,3 +133,21 @@ app.post("/chat", async (req: Request, res: Response): Promise<any> => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+app.post("/get-messages", async (req: Request, res: Response): Promise<any> => {
+    const { userId } = req.body || {};
+
+    if (!userId) return res.status(400).json({ error: "User ID is required." });
+
+    try {
+        const chatHistory = await db
+            .select()
+            .from(chats)
+            .where(eq(chats.userId, userId))
+
+        res.status(200).json({ messages: chatHistory });
+    } catch (error) {
+        console.log("Error fetching chat history", error);
+        res.status(500).json({ error: "Internal server error" })
+    }
+})

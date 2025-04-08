@@ -36,6 +36,8 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // Endpoints
 app.post("/register-user", async (req: Request, res: Response): Promise<any> => {
     const { name, email, lang } = req.body || {};
+    console.log(name, email, lang);
+    
 
     const responseMap: Record<string, string> = { BG: "Име и Имейл адрес са необходими.", EN: "Name and Email is required." };
 
@@ -70,6 +72,7 @@ app.post("/register-user", async (req: Request, res: Response): Promise<any> => 
 
 app.post("/chat", async (req: Request, res: Response): Promise<any> => {
     const { message, username, email } = req.body || {};
+    console.log(message, username, email);
 
     if (!message || !username) return res.status(400).json({ error: "Message and User are required." });
 
@@ -139,6 +142,7 @@ app.post("/chat", async (req: Request, res: Response): Promise<any> => {
 
 app.post("/get-messages", async (req: Request, res: Response): Promise<any> => {
     const { email } = req.body || {};
+    console.log(email);
 
     if (!email) return res.status(400).json({ error: "User ID is required." });
 

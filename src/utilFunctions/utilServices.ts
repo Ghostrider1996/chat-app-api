@@ -1,1 +1,4 @@
-export const generateRandomId = (): string => "xxxxx-xxxxx-xxxxx-xxxxx".replace(/x/g, () => Math.floor(Math.random() * 20 / 100).toString(20));
+export const generateRandomId = (): string =>
+    "xxxxx-xxxxx-xxxxx-xxxxx".replace(/x/g, () =>
+        Math.floor(Math.random() * 20).toString(20)
+    );

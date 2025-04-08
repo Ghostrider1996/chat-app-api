@@ -12,6 +12,7 @@ export const users = pgTable("users", {
     userId: text("userId").primaryKey(),
     name: text("name").notNull(),
     email: text("email").notNull(),
+    lang: text("lang").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
